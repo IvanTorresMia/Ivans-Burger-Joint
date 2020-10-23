@@ -1,5 +1,5 @@
 body {
-  background-color: aqua;
+  background-color: #FFEFE7;
 }
 
 li {
@@ -19,4 +19,8 @@ li {
 
 .form-group {
   margin-bottom: 5px;
+}
+
+.addBurgerBtn {
+  height: 40px;
 }

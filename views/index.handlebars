@@ -1,56 +1,53 @@
+
+<div class="row d-flex justify-content-center">
 <h1>Burgers!</h1>
+</div>
 
-<img src="../assets/image-asset.jpg" class="img-fluid" alt="Responsive image">
+<div class="row d-flex justify-content-center">
+<img src="https://cdn.dribbble.com/users/3113663/screenshots/11237631/media/f8c01d5c19b6afb5ddcec993ead41432.jpg" class="img-fluid" alt="Responsive image" style="width: 450px;">
+</div>
 
-<h2>Add a Burger</h2>
+
+<div class="row d-flex justify-content-center">
 <form class="create-form">
-
-  <div class="form-group">
-    <label for="new-burger">Burger Name:</label>
-    <input type="text" id="new-burger" name="burger_name">
-  </div>
-
-
-  <div class="form-group">
-    <label for="devoured">Hungry?</label><br>
-    <input type="radio" name="devoured" value="0" checked> hungry!<br>
-    <input type="radio" name="devoured" value="1"> Full!
-  </div>
-
-
-  <button type="submit">Add Burger</button>
+          <h2>Add a Burger</h2>
+          <label for="new-burger">Burger Name:</label>
+          <input type="text" id="new-burger" name="burger_name">
+   
+<button class="btn btn-secondary ml-2 addBurgerBtn" type="submit">Add Burger</button>
+          <label for="devoured"></label><br>
+          <input type="radio" name="devoured" value="0" checked> Hungry!<br>
+          <input type="radio" name="devoured" value="1"> Full!
+  
 </form>
 
+</div>
 
 
-
-<div class="row ml-6 justify-content-center">
-  <div class="col-sm-4">
-    
-<h2>Ready to eat burgers!!</h2>
-<ul>
-  {{#each burgers}}
-    {{#unless devoured}}
+<div class="d-flex justify-content-center">
+  <div class="col text-center">
+    <h2>Ready to eat burgers!!</h2>
+    <div>
+      {{#each burgers}}
+      {{#unless devoured}}
       {{> burgers/burger-block devour=true}}
-    {{/unless}}
-  {{/each}}
-</ul>
- </div>
-    
-
-
-  <div class="col-sm-4">
-  
-<h2>burgers I ate!</h2>
-<ul>
-  {{#each burgers}}
-    {{#if devoured}}
-      {{> burgers/burger-block devour=false}}
-    {{/if}}
-  {{/each}}
-</ul>
- </div>
-   
+      {{/unless}}
+      {{/each}}
+    </div>
   </div>
 
 
+
+  <div class="col text-center">
+
+    <h2>burgers I ate!</h2>
+    <div>
+      {{#each burgers}}
+      {{#if devoured}}
+      {{> burgers/burger-block devour=false}}
+      {{/if}}
+      {{/each}}
+    </div>
+  </div>
+
+</div>
