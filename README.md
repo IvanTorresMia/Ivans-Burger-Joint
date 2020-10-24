@@ -10,92 +10,225 @@
 * [License](#License)
 
 ## Description 
-Hi! Welcome to my Employee app. Here you are able to create a set of employees and the first thing you will be presented with after you install the app is a series of questions asking you information about your manager then giving you the option to add interns and or an engineer. Once you have answered the questions the app will render an html file for you! you will have a designed page with cards containing the information you entered about your employees. In the next few sections I will tell you how to install the app. 
+Hi! Welcome to my Burger Joint Website. Ivan's Burger Joint is a burger logger which was built with MySQL, Node, Express, Handlebars and ORM that is built within the application. 
+With some handlebars magic and html I was able to build the front end of the page and through Node and MySql I was able to query data into the app. Here you are able to add a burger to the joint and set it ready to be eaten and then DEVOUR it, by changing the locations of the burger. Using Heroku and JawsDb I was able to connect my data base and deploy the website. 
+
 
 
 ## Technologies
 * [JavaScript](https://www.w3schools.com/js/)
-* [Inquirer](https://www.npmjs.com/package/inquirer)
-* [FileSystem](https://nodejs.dev/learn/the-nodejs-fs-module)
-* [Node.js](https://nodejs.org/en/)
-* [Inquirer](https://www.npmjs.com/package/inquirer)
-
+* [MySQL](https://www.mysql.com/)
+* [Handlebars](https://handlebarsjs.com/)
+* [Express](https://expressjs.com/)
+* [JawsDB](https://elements.heroku.com/addons/jawsdb)
+* [jQuery](https://jquery.com/)
+* [HTML](https://www.w3schools.com/html/)
+* [CSS](https://www.w3schools.com/css/)
 
 ## Features
-![Employee-gif](./assets/Employee-app-gif.gif2.gif)
+![GIF](./assets/Burger.gif)
 
-* So After I used inwuire to prompt the user for a manager I called a function that asks what king of employee would they like to make. 
+* So I will start out with some good ol' handlebars code. Here I am able to generate a front end by connecting to jquery through my main.handlebars page. But But the interesting part is the handlebars syntax which I mainly used to generate multiple buttons with the #each at the button of the page. The button is living within the burger.block.handlebars file. 
 ```
- inquirer.prompt(managerQuestions)
-    .then(function(managerAnswers) {
-        const manager = new Manager(managerAnswers.managersName, managerAnswers.managersId, managerAnswers.managersEmail, managerAnswers.managersOfficeNumber)
-        employees.push(manager)
-        kindOfEmployee();
-    })
+
+<div class="row d-flex justify-content-center">
+<h1>Burgers!</h1>
+</div>
+
+<div class="row d-flex justify-content-center">
+<img src="https://cdn.dribbble.com/users/3113663/screenshots/11237631/media/f8c01d5c19b6afb5ddcec993ead41432.jpg" class="img-fluid" alt="Responsive image" style="width: 450px;">
+</div>
+
+
+<div class="row d-flex justify-content-center">
+<form class="create-form">
+          <h2>Add a Burger</h2>
+          <label for="new-burger">Burger Name:</label>
+          <input type="text" id="new-burger" name="burger_name">
+   
+<button class="btn btn-secondary ml-2 addBurgerBtn" type="submit">Add Burger</button>
+          <label for="devoured"></label><br>
+          <input type="radio" name="devoured" value="0" checked> Hungry!<br>
+          <input type="radio" name="devoured" value="1"> Full!
+  
+</form>
+
+</div>
+
+
+<div class="d-flex justify-content-center">
+  <div class="col text-center">
+    <h2>Ready to eat burgers!!</h2>
+    <div>
+      {{#each burgers}}
+      {{#unless devoured}}
+      {{> burgers/burger-block devour=true}}
+      {{/unless}}
+      {{/each}}
+    </div>
+  </div>
+
+
+
+  <div class="col text-center">
+
+    <h2>burgers I ate!</h2>
+    <div>
+      {{#each burgers}}
+      {{#if devoured}}
+      {{> burgers/burger-block devour=false}}
+      {{/if}}
+      {{/each}}
+    </div>
+  </div>
+
+</div>
   ```
 
 
-* Here is the function I call to ask the user what kind of employee they would like to make. Depending on their answer it will prompt them for either a intern or an engineew and push an new employee to an array. in the case that they say "none" then the app writes a new html file with the new employees.
+* ORM 
+* Here is where we store all of our SQL commands. Be cause of this ORM  we are able to just simply require this file and call the functions to create, find all, and update our data. This allows us to let this live in this file and not be repetetive making commands for MySql. 
 
 ```
-const employees = [];
 
-function kindOfEmployee() {
-    inquirer.prompt(newEmployee)
-        .then(function(newEmployeeAnswer) {
-            if (newEmployeeAnswer.kindofTeamMember === "Engineer") {
-                inquirer.prompt(engineersQuestions)
-                    .then(function(engineerAnswers) {
-                        const engineer = new Engineer(engineerAnswers.engineerName, engineerAnswers.engineerId, engineerAnswers.engineerEmail, engineerAnswers.engineerGithub);
-                        employees.push(engineer)
-                        kindOfEmployee()
-                    })
-            } else if (newEmployeeAnswer.kindofTeamMember === "Intern") {
-                inquirer.prompt(internQuestions)
-                    .then(function(internAnswers) {
-                        const intern = new Intern(internAnswers.internsName, internAnswers.internsId, internAnswers.internsEmail, internAnswers.internsSchool);
-                        employees.push(intern);
-                        kindOfEmployee()
-                    })
-            } else if (newEmployeeAnswer.kindofTeamMember === "none") {
-                const results = render(employees);
-                fs.writeFile("./Develope/rendered.html", results,
-                    function(err) {
-                        if (err) throw err;
-                        console.log("it worked!")
+var connection = require("../config/connection.js");
 
-                    })
-            }
-        })
-}
+var orm = {
+  all: function(tableInput, cb) {
+    var queryString = "SELECT * FROM " + tableInput + ";";
+    connection.query(queryString, function(err, result) {
+      if (err) {
+        throw err;
+      }
+      cb(result);
+    });
+  },
+  create: function(table, cols, vals, cb) {
+    var queryString = "INSERT INTO " + table;
+
+    queryString += " (";
+    queryString += cols.toString();
+    queryString += ") ";
+    queryString += "VALUES (";
+    queryString += printQuestionMarks(vals.length);
+    queryString += ") ";
+
+    console.log(queryString);
+
+    connection.query(queryString, vals, function(err, result) {
+      if (err) {
+        throw err;
+      }
+
+      cb(result);
+    });
+  },
+
+  update: function(table, objColVals, condition, cb) {
+    var queryString = "UPDATE " + table;
+
+    queryString += " SET ";
+    queryString += objToSql(objColVals);
+    queryString += " WHERE ";
+    queryString += condition;
+
+    console.log(queryString);
+    connection.query(queryString, function(err, result) {
+      if (err) {
+        throw err;
+      }
+
+      cb(result);
+    });
+  }
+};
+
+// Export the orm object for the model (cat.js).
+module.exports = orm;
+
 ```
 
+* Controller!
+* This code comunicates between the user and the data base recieving all the api calls and communicating back to the data base. 
+
+```
+var express = require("express");
+
+var router = express.Router();
+
+// Import the model to use its database functions.
+var burger = require("../models/burger.js");
+
+// Create all our routes and set up logic within those routes where required.
+router.get("/", function(req, res) {
+  burger.all(function(data) {
+    var hbsObject = {
+      burgers: data
+    };
+    console.log(hbsObject);
+    res.render("index", hbsObject);
+  });
+});
+
+router.post("/api/burgers", function(req, res) {
+   if (req.body.burger_name != "") {
+  burger.create([
+    "burger_name", "devoured"
+  ], [
+    req.body.burger_name, req.body.devoured
+  ], function(result) {
+    // Send back the ID of the new quote
+    res.json({ id: result.insertId });
+  });
+ }
+});
+
+router.put("/api/burgers/:id", function(req, res) {
+  var condition = "id = " + req.params.id;
+
+  console.log("condition", condition);
+
+  burger.update({
+    devoured: req.body.devoured
+  }, condition, function(result) {
+    if (result.changedRows == 0) {
+      // If no rows were changed, then the ID must not exist, so 404
+      return res.status(404).end();
+    } else {
+      res.status(200).end();
+    }
+  });
+});
+
+// Export routes for server.js to use.
+module.exports = router;
 
 
-## Usage
-[Usage-Video](https://drive.google.com/file/d/1LGy1IfXMMrCYD3GC1WQpJG-t-X_o8UCy/view)
+```
+
 
 
 ## Installation
-In order to run this app you have to install inquirer using 
+In Order to install the dependencies you have to do a 
 ```
-mpi install inquirer
+mpm install
 ```
-Then You intall "fs'
+In order to run the code you have to type this in your terminal. 
 
 ```
-npm install fs
+node server.js
 ```
 
-then to run you type 
+This is deployed but if you wanted to run through express you have to use this.  
 ```
-node app.js
+var PORT = process.env.PORT || 8080;
 ```
 
 ## Author
 Ivan Torres
 * [GitHub-Repo](https://github.com/IvanTorresMia/READme-project-Ivan)
 * [linkedIn](www.linkedin.com/in/ivan-torres-0828931b2)
+* [Portfolio](www.linkedin.com/in/ivan-torres-0828931b2)
 
 ## Credits
 * Credits for this homework assignment go out to Jerome, Manuel, Kerwin, Roger, and all of my classmates who helped me in study sessions. As well as my tutor who helped me a ton with understanding this homework assignment. 
