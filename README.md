@@ -228,7 +228,7 @@ var PORT = process.env.PORT || 8080;
 Ivan Torres
 * [GitHub-Repo](https://github.com/IvanTorresMia/READme-project-Ivan)
 * [linkedIn](www.linkedin.com/in/ivan-torres-0828931b2)
-* [Portfolio](www.linkedin.com/in/ivan-torres-0828931b2)
+* [Portfolio](file:///Users/ivantorres/Downloads/Desktop/Portfolio-homework/IvanTorres-portfolio/index.html)
 
 ## Credits
 * Credits for this homework assignment go out to Jerome, Manuel, Kerwin, Roger, and all of my classmates who helped me in study sessions. As well as my tutor who helped me a ton with understanding this homework assignment. 
