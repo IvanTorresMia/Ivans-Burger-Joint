@@ -13,7 +13,8 @@
 Hi! Welcome to my Burger Joint Website. Ivan's Burger Joint is a burger logger which was built with MySQL, Node, Express, Handlebars and ORM that is built within the application. 
 With some handlebars magic and html I was able to build the front end of the page and through Node and MySql I was able to query data into the app. Here you are able to add a burger to the joint and set it ready to be eaten and then DEVOUR it, by changing the locations of the burger. Using Heroku and JawsDb I was able to connect my data base and deploy the website. 
 
-
+## Deployed Link
+* [Ivan's Burger Joint](https://ivans-burger-joint.herokuapp.com/)
 
 ## Technologies
 * [JavaScript](https://www.w3schools.com/js/)
